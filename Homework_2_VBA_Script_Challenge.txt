@@ -1,0 +1,133 @@
+Sub Challenge():
+
+Dim wsheet As Worksheet
+
+For Each wsheet In ActiveWorkbook.Worksheets
+Sheets(wsheet.Name).Select
+
+Dim TickerName As String
+Dim TickerTotal As Double
+Dim FirstOpen As Double
+FirstOpen = Cells(2, 3).Value
+
+Dim LastClose As Double
+Dim YearlyChange As Double
+Dim PercentChange As Double
+Dim GreatestIncreaseValue As Double
+Dim GreatestDecreaseValue As Double
+Dim GreatestVolumeValue As Double
+Dim GreatestIncreaseTicker As String
+Dim CurrentHighValue As Double
+Dim CurrentHighTicker As String
+Dim CurrentLowValue As Double
+Dim CurrentLowTicker As String
+Dim MaxVolumeValue As Double
+Dim MaxVolumeTicker As String
+
+Cells(1, 9).Value = "Ticker"
+Cells(1, 10).Value = "Yearly Change"
+Cells(1, 11).Value = "Percent Change"
+Cells(1, 12).Value = "Total Stock Volume"
+Cells(1, 16).Value = "Ticker"
+Cells(1, 17).Value = "Value"
+Cells(2, 15).Value = "Greatest % Increase"
+Cells(3, 15).Value = "Greatest % Decrease"
+Cells(4, 15).Value = "Greatest Total Volume"
+
+TickerTotal = 0
+
+Dim summarytablerow As Integer
+summarytablerow = 2
+
+Dim LastRow As Long
+LastRow = Cells(Rows.Count, 1).End(xlUp).Row
+
+For i = 2 To LastRow
+
+If Cells(i + 1, 1).Value = Cells(i, 1).Value Then
+TickerTotal = TickerTotal + Cells(i, 7).Value
+
+Else
+
+LastClose = Cells(i, 6).Value
+YearlyChange = LastClose - FirstOpen
+
+If FirstOpen = 0 Then
+PercentChange = 0
+Else
+PercentChange = (LastClose - FirstOpen) / FirstOpen
+End If
+
+TickerName = Cells(i, 1).Value
+TickerTotal = TickerTotal + Cells(i, 7).Value
+Range("I" & summarytablerow).Value = TickerName
+Range("j" & summarytablerow).Value = YearlyChange
+Range("k" & summarytablerow).Value = PercentChange
+Range("l" & summarytablerow).Value = TickerTotal
+summarytablerow = summarytablerow + 1
+TickerTotal = 0
+LastClose = 0
+
+FirstOpen = Cells(i + 1, 3).Value
+
+End If
+
+Next
+
+CurrentHighValue = 0
+CurrentLowValue = 0
+MaxVolumeValue = 0
+
+Dim LastRow2 As Long
+LastRow2 = Cells(Rows.Count, 9).End(xlUp).Row
+
+For j = 2 To LastRow2
+
+If CurrentHighValue > Cells(j, 11).Value Then
+
+CurrentHighValue = CurrentHighValue
+CurrentHighTicker = CurrentHighTicker
+
+Else
+
+CurrentHighValue = Cells(j, 11).Value
+CurrentHighTicker = Cells(j, 9).Value
+
+End If
+
+If CurrentLowValue < Cells(j, 11).Value Then
+
+CurrentLowValue = CurrentLowValue
+CurrentLowTicker = CurrentLowTicker
+
+Else
+
+CurrentLowValue = Cells(j, 11).Value
+CurrentLowTicker = Cells(j, 9).Value
+
+End If
+
+If MaxVolumeValue > Cells(j, 12).Value Then
+
+MaxVolumeValue = MaxVolumeValue
+MaxVolumeTicker = MaxVolumeTicker
+
+Else
+
+MaxVolumeValue = Cells(j, 12).Value
+MaxVolumeTicker = Cells(j, 9).Value
+
+End If
+
+Next
+
+Cells(2, 16).Value = CurrentHighTicker
+Cells(2, 17).Value = CurrentHighValue
+Cells(3, 16).Value = CurrentLowTicker
+Cells(3, 17).Value = CurrentLowValue
+Cells(4, 16).Value = MaxVolumeTicker
+Cells(4, 17).Value = MaxVolumeValue
+
+Next
+
+End Sub

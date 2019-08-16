@@ -1,0 +1,61 @@
+Sub Moderate():
+
+Dim TickerName As String
+
+Dim TickerTotal As Double
+
+Dim FirstOpen As Double
+FirstOpen = Cells(2, 3).Value
+
+Dim LastClose As Double
+
+Dim YearlyChange As Double
+
+Dim PercentChange As Double
+
+
+Cells(1, 9).Value = "Ticker"
+Cells(1, 10).Value = "Yearly Change"
+Cells(1, 11).Value = "Percent Change"
+Cells(1, 12).Value = "Total Stock Volume"
+TickerTotal = 0
+
+Dim summarytablerow As Integer
+summarytablerow = 2
+
+Dim LastRow As Long
+LastRow = Cells(Rows.Count, 1).End(xlUp).Row
+
+For i = 2 To LastRow
+
+If Cells(i + 1, 1).Value = Cells(i, 1).Value Then
+TickerTotal = TickerTotal + Cells(i, 7).Value
+
+Else
+
+LastClose = Cells(i, 6).Value
+YearlyChange = LastClose - FirstOpen
+
+If FirstOpen = 0 Then
+PercentChange = 0
+Else
+PercentChange = (LastClose - FirstOpen) / FirstOpen
+End If
+
+TickerName = Cells(i, 1).Value
+TickerTotal = TickerTotal + Cells(i, 7).Value
+Range("I" & summarytablerow).Value = TickerName
+Range("j" & summarytablerow).Value = YearlyChange
+Range("k" & summarytablerow).Value = PercentChange
+Range("l" & summarytablerow).Value = TickerTotal
+summarytablerow = summarytablerow + 1
+TickerTotal = 0
+LastClose = 0
+
+FirstOpen = Cells(i + 1, 3).Value
+
+End If
+
+Next
+
+End Sub
