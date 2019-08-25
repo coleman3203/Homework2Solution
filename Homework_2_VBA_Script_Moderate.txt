@@ -58,4 +58,13 @@ End If
 
 Next
 
+For i = 2 To LastRow
+
+If Cells(i, 10) > 0 Then
+Cells(i, 10).Interior.ColorIndex = 4
+Else: Cells(i, 10).Interior.ColorIndex = 3
+End If
+
+Next
+
 End Sub
